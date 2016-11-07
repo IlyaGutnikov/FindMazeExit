@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Pathfinding;
+using System;
 
 /** Linearly interpolating movement script.
  * This movement script will follow the path exactly, it uses linear interpolation to move between the waypoints in the path.
@@ -24,6 +25,9 @@ using Pathfinding;
 [AddComponentMenu("Pathfinding/AI/AISimpleLerp (2D,3D generic)")]
 [HelpURL("http://arongranberg.com/astar/docs/class_a_i_lerp.php")]
 public class AILerp : MonoBehaviour {
+
+	public List<GameObject> possibleTargets = new List<GameObject>();
+
 	/** Determines how often it will search for new paths.
 	 * If you have fast moving targets or AIs, you might want to set it to a lower value.
 	 * The value is in seconds between path requests.
@@ -236,6 +240,16 @@ public class AILerp : MonoBehaviour {
 	 * and override the function in that script.
 	 */
 	public virtual void OnTargetReached () {
+
+		Debug.Log ("On target Reached");
+
+		if (possibleTargets.Count != 0) {
+
+		GameObject currentTarget = possibleTargets [0];
+		possibleTargets.RemoveAt (0);
+		this.target = currentTarget.transform;
+			SearchPath ();
+		}
 	}
 
 	/** Called when a requested path has finished calculation.
