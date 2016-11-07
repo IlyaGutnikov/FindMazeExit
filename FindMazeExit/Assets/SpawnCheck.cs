@@ -45,7 +45,10 @@ public class SpawnCheck : MonoBehaviour {
 			Debug.Log ("coll2d.Length " + coll2d.Length);
 
 			if (coll2d.Length == 0) {
-				spawnedObject = (GameObject)Instantiate (checkObject, currentPosition, Quaternion.identity);
+
+				Vector2 spawnPos = new Vector2 (Mathf.Round (currentPosition.x), Mathf.Round (currentPosition.y));
+
+				spawnedObject = (GameObject)Instantiate (checkObject, spawnPos, Quaternion.identity);
 
 				this.gameObject.GetComponentInParent<AILerp> ().possibleTargets.Add (spawnedObject);
 			}
