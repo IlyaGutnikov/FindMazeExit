@@ -13,9 +13,6 @@ public class SpawnCheck : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Debug.Log("Into spawn check");
-	
-		boxSize = checkObject.transform.localScale;
-		Debug.Log ("BoxSize " + boxSize);
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
@@ -25,6 +22,14 @@ public class SpawnCheck : MonoBehaviour {
 		if (other.gameObject.tag == "Target") {
 			Debug.Log ("Found Target");
 		}
+
+		if (other.gameObject.tag == "Wall") {
+			canSpawnCheck = false;
+		}
+
+		if (other.gameObject.tag == "Check") {
+			canSpawnCheck = false;
+		}
 	}
 
 	void OnTriggerExit2D(Collider2D other) {
@@ -33,20 +38,18 @@ public class SpawnCheck : MonoBehaviour {
 	}
 		
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update () {
+
+		Debug.Log ("canSpawnCheck " + canSpawnCheck);
 
 		if (canSpawnCheck == true) {
 
-			Vector2 currentPosition = this.gameObject.transform.position;
-			Vector3 parentPosition = this.gameObject.transform.parent.transform.position;
-			Collider2D[] coll2d = null;
-			coll2d = Physics2D.OverlapBoxAll (currentPosition, boxSize, 0,10);
+			Vector3 currentPosition = this.gameObject.transform.position;
+			Vector3 spawnPos = new Vector3 (Mathf.Round (currentPosition.x), Mathf.Round (currentPosition.y),0);
 
-			Debug.Log ("coll2d.Length " + coll2d.Length);
+			Debug.Log ("Physics.CheckSphere " + Physics.CheckSphere (spawnPos, 10));
 
-			if (coll2d.Length == 0) {
-
-				Vector2 spawnPos = new Vector2 (Mathf.Round (currentPosition.x), Mathf.Round (currentPosition.y));
+			if (!Physics.CheckSphere(spawnPos,10)) {
 
 				spawnedObject = (GameObject)Instantiate (checkObject, spawnPos, Quaternion.identity);
 
