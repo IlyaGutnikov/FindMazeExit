@@ -27,6 +27,7 @@ using System;
 public class AILerp : MonoBehaviour {
 
 	public List<GameObject> possibleTargets = new List<GameObject>();
+	public bool exitFound = false;
 
 	/** Determines how often it will search for new paths.
 	 * If you have fast moving targets or AIs, you might want to set it to a lower value.
@@ -113,6 +114,7 @@ public class AILerp : MonoBehaviour {
 	 * If you override this function you should in most cases call base.Awake () at the start of it.
 	 * */
 	protected virtual void Awake () {
+
 		//This is a simple optimization, cache the transform component lookup
 		tr = transform;
 
@@ -138,6 +140,21 @@ public class AILerp : MonoBehaviour {
 	 * \see RepeatTrySearchPath
 	 */
 	protected virtual void Start () {
+
+		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag ("CanGo");
+
+		Debug.Log ("Cango objects " + gameObjects.Length);
+
+		for (int i = 0; i < gameObjects.Length; i++) {
+
+			possibleTargets.Add (gameObjects [i]);
+		}
+
+		OnTargetReached ();
+
+		AstarData data = GameObject.FindGameObjectWithTag ("AStar").GetComponent<AstarPath> ().astarData;
+
+		Debug.Log ("test AStar graphs " + data.graphs.Length);
 		startHasRun = true;
 		OnEnable();
 	}
@@ -243,12 +260,15 @@ public class AILerp : MonoBehaviour {
 
 		Debug.Log ("On target Reached");
 
-		if (possibleTargets.Count != 0) {
+		if ((possibleTargets.Count != 0) && (exitFound == false)) {
 
-		GameObject currentTarget = possibleTargets [0];
-		possibleTargets.RemoveAt (0);
-		this.target = currentTarget.transform;
+			GameObject currentTarget = possibleTargets [0];
+			possibleTargets.RemoveAt (0);
+			this.target = currentTarget.transform;
 			SearchPath ();
+
+			currentTarget.GetComponent<CheckScript> ().isCheckPosition = true;
+			currentTarget.GetComponent<SpriteRenderer> ().color = Color.red;
 		}
 	}
 

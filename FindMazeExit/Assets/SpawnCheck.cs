@@ -38,22 +38,30 @@ public class SpawnCheck : MonoBehaviour {
 	}
 		
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 
 		Debug.Log ("canSpawnCheck " + canSpawnCheck);
 
 		if (canSpawnCheck == true) {
 
-			Vector3 currentPosition = this.gameObject.transform.position;
-			Vector3 spawnPos = new Vector3 (Mathf.Round (currentPosition.x), Mathf.Round (currentPosition.y),0);
+			Vector2 currentPosition = this.gameObject.transform.position;
+			Vector2 spawnPos = new Vector3 (Mathf.Round (currentPosition.x), Mathf.Round (currentPosition.y));
 
-			Debug.Log ("Physics.CheckSphere " + Physics.CheckSphere (spawnPos, 10));
+			Debug.Log ("Physics.CheckSphere " + Physics2D.OverlapCircle (spawnPos, 5,9));
 
-			if (!Physics.CheckSphere(spawnPos,10)) {
+			if (!Physics2D.OverlapCircle(spawnPos,5,9)) {
 
 				spawnedObject = (GameObject)Instantiate (checkObject, spawnPos, Quaternion.identity);
 
-				this.gameObject.GetComponentInParent<AILerp> ().possibleTargets.Add (spawnedObject);
+				if (!this.gameObject.GetComponentInParent<AILerp> ().possibleTargets.Contains (spawnedObject)) {
+
+					this.gameObject.GetComponentInParent<AILerp> ().possibleTargets.Add (spawnedObject);
+				
+				} else {
+
+					Destroy (spawnedObject);
+				
+				}
 			}
 		}
 	
