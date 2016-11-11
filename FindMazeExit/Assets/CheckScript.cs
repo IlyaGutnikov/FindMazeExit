@@ -10,6 +10,7 @@ public class CheckScript : MonoBehaviour {
 
 		if (other.gameObject.tag.Equals ("Sensor") && isExit == true) {
 
+			this.gameObject.GetComponent<SpriteRenderer> ().enabled = true;
 			this.gameObject.GetComponent<SpriteRenderer> ().color = Color.cyan;
 
 			Time.timeScale = 0;

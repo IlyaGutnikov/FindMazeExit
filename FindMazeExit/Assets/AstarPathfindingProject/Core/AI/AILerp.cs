@@ -268,7 +268,7 @@ public class AILerp : MonoBehaviour {
 			SearchPath ();
 
 			currentTarget.GetComponent<CheckScript> ().isCheckPosition = true;
-			currentTarget.GetComponent<SpriteRenderer> ().color = Color.red;
+			//currentTarget.GetComponent<SpriteRenderer> ().color = Color.red;
 		}
 	}
 

@@ -9,6 +9,6 @@ public class GameManager : MonoBehaviour {
 		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag ("CanGo");
 		int exit = (int)Mathf.Round (Random.Range (0, gameObjects.Length));
 		gameObjects [exit].GetComponent<CheckScript> ().isExit = true;
-	
+		gameObjects [exit].GetComponent<SpriteRenderer> ().enabled = true;
 	}
 }
